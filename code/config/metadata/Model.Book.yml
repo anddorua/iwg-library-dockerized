@@ -1,0 +1,18 @@
+Model\Book:
+  exclusion_policy: ALL
+  properties:
+    id:
+      expose: true
+      type: integer
+    name:
+      expose: true
+      type: string
+    yearOfIssue:
+      expose: true
+      type: integer
+    category:
+      expose: true
+      type: Model\Category
+    authors:
+      expose: true
+      type: Doctrine\Common\Collections\ArrayCollection<Model\Author>

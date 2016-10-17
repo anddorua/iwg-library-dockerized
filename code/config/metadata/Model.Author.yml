@@ -1,0 +1,15 @@
+Model\Author:
+  exclusion_policy: ALL
+  properties:
+    id:
+      expose: true
+      type: integer
+    name:
+      expose: true
+      type: string
+    fName:
+      expose: true
+      type: string
+    yearOfBirth:
+      expose: true
+      type: integer

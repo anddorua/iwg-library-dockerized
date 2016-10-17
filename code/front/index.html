@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>My AngularJS App</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
+  <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+  -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/app.css">
+
+</head>
+<body>
+
+<style type="text/css">
+  form.tab-form-demo .tab-pane {
+    margin: 20px 20px;
+  }
+</style>
+
+<div class="container" ng-controller="TabsDemoCtrl">
+  <!--
+  <div class="row" >
+    <p>Select a tab by setting active binding to true:</p>
+    <p>
+      <button type="button" class="btn btn-default btn-sm" ng-click="active = 1">Select second tab</button>
+      <button type="button" class="btn btn-default btn-sm" ng-click="active = 2">Select third tab</button>
+    </p>
+    <p>
+      <button type="button" class="btn btn-default btn-sm" ng-click="tabs[1].disabled = ! tabs[1].disabled">Enable / Disable third tab</button>
+    </p>
+    <hr />
+  </div>
+  -->
+  <div class="row>">
+    <!-- error alert -->
+    <div ng-controller="AlertDemoCtrl">
+      <div class="col-md-12 alert-danger" uib-alert ng-show="alert.msg" close="closeAlert()"><div ng-bind-html="alert.msg"></div></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <uib-tabset active="active">
+      <uib-tab index="0" heading="Books">
+
+        <!-- books pane-->
+        <div class="row" style="margin-bottom: 10px; margin-top: 10px;">
+          <div class="col-md-6">
+            <form>
+
+              <div class="form-group">
+                <label for="book_name">{{books.current.id ? books.current.id : "ID"}}</label>
+                <input class="form-control" type="text" placeholder="name" id="book_name" ng-model="books.bookNameSelected">
+              </div>
+
+              <div class="form-group">
+                <label for="book_year">Year of issue</label>
+                <input class="form-control" type="text" placeholder="year" id="book_year" ng-model="books.bookYearOfIssueSelected">
+              </div>
+
+              <div class="form-group">
+                <label for="book_cat">Category</label>
+                <select size="1" class="form-control" id="book_cat"
+                  ng-model="books.categorySelected"
+                  ng-options="category as category.id + ':' + category.name for category in categories.list track by category.id">
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="authors_list">Authors</label>
+                <select size="4" class="form-control" id="authors_list"
+                  ng-model="books.bookAuthorSelected"
+                  ng-options="author as author.name + ' ' + author.f_name + ' ' + author.year_of_birth for author in books.bookAuthors">
+                </select>
+              </div>
+              <div class="clearfix">
+              <button class="btn btn-primary btn-sm pull-right" ng-click="books.removeAuthor(books.bookAuthorSelected)">Remove author</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- authors src list -->
+          <div class="col-md-6">
+              <div class="form-group">
+                <label for="authors_full_list">Authors available</label>
+                <select size="10" class="form-control" id="authors_full_list"
+                  ng-model="books.authorSrcListSelected"
+                  ng-options="author as author.name + ' ' + author.f_name + ' ' + author.year_of_birth for author in books.authorSrcList">
+                </select>
+              </div>
+              <button class="btn btn-primary btn-sm pull-right" ng-click="books.assignAuthor(books.authorSrcListSelected)">Assign to book</button>
+          </div>
+          <!-- /authors src list -->
+
+        </div>
+          <div class="well well-sm" style="margin-top: 20px;">
+            <button class="btn btn-primary btn-sm" ng-click="books.add(books.bookNameSelected, books.bookYearOfIssueSelected, books.categorySelected, books.bookAuthors)">Add</button>
+            <button class="btn btn-success btn-sm" ng-click="books.update(books.current.id, books.bookNameSelected, books.bookYearOfIssueSelected, books.categorySelected, books.bookAuthors)">Update</button>
+            <button class="btn btn-danger btn-sm" ng-click="books.delete(books.current.id)">Delete</button>
+          </div>
+        <div class="row">
+
+        </div>
+        <!-- book list -->
+        <div class="row">
+          <div class="col-md-12">
+            <select size="10" class="form-control" 
+              ng-model="books.current"
+              ng-init="books.current = books.list[0] ? books.list[0] : {}"
+              ng-options="book as book.id + ': ' + book.name + ' ' + book.year_of_issue + ' ' + book.category_id for book in books.list track by book.id">
+            </select>
+          </div>
+        </div>
+        <!-- /books pane-->
+      </uib-tab>
+
+
+      <uib-tab index="1" heading="Authors">
+        <!-- authors pane-->
+        <div class="row" style="margin-bottom: 10px; margin-top: 10px;">
+          <div class="col-md-12">
+            <form class="form-inline">
+
+              <div class="form-group">
+                <label for="auth_name">{{authors.current.id ? authors.current.id : "ID"}}:</label>
+                <input class="form-control" type="text" placeholder="name" id="auth_name" ng-model="authors.current.name">
+              </div>
+
+              <div class="form-group">
+                <label for="auth_fname">Family name:</label>
+                <input class="form-control" type="text" placeholder="family name" id="auth_fname" ng-model="authors.current.f_name">
+              </div>
+
+              <div class="form-group">
+                <label for="auth_yob">Year of birth:</label>
+                <input class="form-control" type="text" placeholder="year of birth" id="auth_yob" ng-model="authors.current.year_of_birth">
+              </div>
+
+              <button class="btn btn-primary btn-sm" ng-click="authors.add(authors.current.name, authors.current.f_name, authors.current.year_of_birth)">Add</button>
+              <button class="btn btn-success btn-sm" ng-click="authors.update(authors.current.id, authors.current.name, authors.current.f_name, authors.current.year_of_birth)">Update</button>
+              <button class="btn btn-danger btn-sm" ng-click="authors.delete(authors.current.id)">Delete</button>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <select size="10" class="form-control" 
+              ng-model="authors.current"
+              ng-init="authors.current = authors.list[0] ? authors.list[0] : {}"
+              ng-options="author as author.id + ': ' + author.name + ' ' + author.f_name + ' ' + author.year_of_birth for author in authors.list track by author.id">
+            </select>
+          </div>
+        </div>
+        <!-- /authors pane-->
+      </uib-tab>
+
+      <uib-tab index="2" heading="Categories">
+        <!-- categories pane-->
+        <div class="row" style="margin-bottom: 10px; margin-top: 10px;">
+          <div class="col-md-12">
+            <form class="form-inline">
+              <div class="form-group">
+                <label for="cat_name">{{categories.current.id ? categories.current.id : "ID"}}:</label>
+                <input class="form-control" type="text" placeholder="name" id="cat_name" ng-model="categories.current.name">
+              </div>
+              <button class="btn btn-primary btn-sm" ng-click="categories.add(categories.current.name)">Add</button>
+              <button class="btn btn-success btn-sm" ng-click="categories.update(categories.current.id, categories.current.name)">Update</button>
+              <button class="btn btn-danger btn-sm" ng-click="categories.delete(categories.current.id)">Delete</button>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <select size="10" class="form-control" 
+              ng-model="categories.current"
+              ng-init="categories.current = categories.list[0] ? categories.list[0] : {}"
+              ng-options="category as category.id + ': ' + category.name for category in categories.list track by category.id">
+            </select>
+          </div>
+        </div>
+        <!-- /categories pane-->
+      </uib-tab>
+
+      <uib-tab index="3" select="user.logout()">
+        <uib-tab-heading>
+          <i class="glyphicon glyphicon-off"></i> {{user.isAuthorized ? "Logout" : "Login"}}
+        </uib-tab-heading>
+        Here will be login form
+      </uib-tab>
+    </uib-tabset>
+  </div>
+
+  <div class="row" ng-controller="TerminalCtrl" style="margin-top:20px;">
+    <button class="btn btn-sm" ng-click="clear()">Clear</button>
+    <div class="col-md-12" style="height: 200px; overflow: scroll; background-color: #122b40; color: white;">
+      <ng-repeat ng-repeat="line in lines">
+        {{ line.date | date : 'HH:mm:ss' }}: {{ line.text }}<br>
+      </ng-repeat>
+    </div>
+  </div>
+
+</div>
+<!--
+  <ul class="menu">
+    <li><a href="#!/view1">view1</a></li>
+    <li><a href="#!/view2">view2</a></li>
+  </ul>
+
+  -->
+
+
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+  -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-resource.js"></script>
+  <script src="js/angular/angular-route.js"></script>
+  <script src="js/angular/ui-bootstrap-2.2.0.js"></script>
+  <script src="js/angular/ui-bootstrap-tpls-2.2.0.js"></script>
+  <script src="services/restDataProvider.js"></script>
+  <script src="services/alertService.js"></script>
+  <script src="controllers/tabsDemoCtrl.js"></script>
+  <script src="js/app/app.js"></script>
+  <!--
+  <script src="assets/view1/view1.js"></script>
+  <script src="assets/view2/view2.js"></script>
+  -->
+  <script src="components/version/version.js"></script>
+  <script src="components/version/version-directive.js"></script>
+  <script src="components/version/interpolate-filter.js"></script>
+</body>
+</html>
