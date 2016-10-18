@@ -1,13 +1,20 @@
 web:
- image: nginx:latest
- ports:
- - "8080:80"
- volumes:
- - ./code:/code
- - ./site.conf:/etc/nginx/conf.d/site.conf
- links:
- - php
+  image: nginx:latest
+  ports:
+  - "8080:80"
+  volumes:
+  - ./code:/code
+  - ./site.conf:/etc/nginx/conf.d/site.conf
+  links:
+  - php
 php:
- image: allansimon/php7-fpm-postgresql
- volumes:
- - ./code:/code
+  image: allansimon/php7-fpm-postgresql
+  volumes:
+  - ./code:/code
+  links:
+  - db
+db:
+  image: postgres:latest
+  volumes:
+  - ./data:/var/lib/postgresql/data
+

@@ -8,7 +8,7 @@
 return [
     'driver' => 'pdo_pgsql',
     'dbname' => 'iway',
-    'host' => 'localhost',
+    'host' => 'db',
     'user' => 'iway',
     'password' => 'iway',
 ];

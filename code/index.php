@@ -31,8 +31,10 @@ $app = new Silex\Application();
 $app['debug'] = true;
 
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
-    'monolog.logfile' => __DIR__.'/development.log',
+    'monolog.logfile' => __DIR__.'/log/development.log',
 ));
+
+\Symfony\Component\Debug\ExceptionHandler::register();
 
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     'db.options' => require('config/dbal.php'),
@@ -58,9 +60,9 @@ $app->register(new \IWG\ServiceProvider\JMSServiceProvider(), [
     'jms.metadata-dir' => __DIR__ . "/config/metadata",
 ]);
 
-$app->mount('categories', new \IWG\Controller\Category());
-$app->mount('authors', new \IWG\Controller\Author());
-$app->mount('books', new \IWG\Controller\Book());
+$app->mount('categories', new \IWG\Controller\CategoryController());
+$app->mount('authors', new \IWG\Controller\AuthorController());
+$app->mount('books', new \IWG\Controller\BookController());
 $app->get('/', function() use ($app) {
     return $app->redirect('/front/index.html');
 });
@@ -101,5 +103,19 @@ $app->error(function (\IWG\Exception\EOperationDeny $e, \Symfony\Component\HttpF
         ]
     );
 });
+
+$app->error(function (\Exception $e, \Symfony\Component\HttpFoundation\Request $request, $code) use ($app) {
+    $format = $app['default_format']($request);
+    return new \Symfony\Component\HttpFoundation\Response($app['serializer']->serialize(
+        [
+            'message' => $e->getMessage(),
+            'type' => get_class($e),
+            'code' => $e->getCode(),
+        ], $format), $e->getCode(), [
+            'Content-Type' => $request->getMimeType($format),
+        ]
+    );
+});
+
 
 $app->run();

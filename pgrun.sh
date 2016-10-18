@@ -1,0 +1,2 @@
+# see description http://ryaneschinger.com/blog/dockerized-postgresql-development-environment/
+docker run --name mypostgres -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d -v ~/docker/nginx/data:/var/lib/postgresql/data postgres

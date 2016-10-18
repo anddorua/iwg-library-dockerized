@@ -1,0 +1,1 @@
+docker run --name db -t -i -v ~/docker/nginx/data:/var/lib/postgresql/data postgres /bin/bash

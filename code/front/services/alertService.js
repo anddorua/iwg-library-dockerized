@@ -8,14 +8,16 @@ angular.module("iwg.lib.alert", [])
             msg: alertMessage,
             setMsg: function(msgToSet) {
                 if (typeof(msgToSet) == 'object') {
-                    if (msgToSet.data.type == "Exception\\EValidation") {
+                    if (msgToSet.data.type == "IWG\\Exception\\EValidation") {
                         var msgToShow = msgToSet.data.message + '<br>';
                         msgToSet.data.errors.forEach(function(eMsg){
                             msgToShow += eMsg.propertyPath + ": " + eMsg.message + '<br>';
                         });
                         this.msg = $sce.trustAsHtml(msgToShow);
-                    } else if (msgToSet.data.type == "Exception\\EOperationDeny") {
+                    } else if (msgToSet.data.type == "IWG\\Exception\\EOperationDeny") {
                         this.msg = $sce.trustAsHtml(msgToSet.data.message);
+                    } else if (msgToSet.data.type == "\\Exception") {
+                        this.msg = $sce.trustAsHtml(msgToSet.data.code + ': ' + msgToSet.data.message);
                     } else {
                         this.msg = $sce.trustAsHtml('<pre>' + $filter('json')(JSON.stringify(msgToSet)) + '</pre>');
                     }
