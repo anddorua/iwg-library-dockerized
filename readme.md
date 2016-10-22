@@ -12,7 +12,7 @@ cd iwg-library-dockerized
 ```
 
 Add to your **hosts** file reference to site domain. 
-Currently it named `php-docker.local`. You can change it **site.conf** file.
+Currently it named **php-docker.local**. You can change it **site.conf** file.
  
 Run starting script
 ```
